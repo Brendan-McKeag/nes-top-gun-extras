@@ -1,6 +1,6 @@
 # Top Gun (NES) Extras
 
-A patch for **Top Gun (USA) (Rev 1)** that adds a title-screen menu for content Konami left in the ROM but never uses: a sprite viewer, the recorder that made the attract demo, the staff credits and a sound nothing plays.
+A patch for **Top Gun (USA) (Rev 1)** that adds a title-screen menu for content Konami left in the ROM but never actually uses: a sprite viewer, the recorder that made the attract demo, and developer credits.
 
 ![Title menu, demo recorder and demo check](media/extras_overview.png)
 
@@ -10,9 +10,9 @@ Everything in this list is Konami's, present in the retail cartridge and unreach
 
 - **Sprite viewer** at `$E9FF`. A 36-byte routine nothing calls. Controller 2 steps object 0 through every sprite set and animation frame.
 - **Attract-demo recorder** at `$CFA7`. A 38-byte routine nothing calls. It turns controller input into the (buttons, frames) pairs that make up the attract-demo table sitting right before it, and the shipped table still carries its overflow fingerprint.
-- **Staff credits** in bank 6 (`$9964`–`$9AD1`). The US release never shows them.
-- **Sound `$24`**, which chains into sounds `$08` and `$06`. Nothing in the game plays it. [Listen](media/unused_sound_24.ogg).
-- **The end of the attract demo.** The demo plane is shot down after 4,100 of the 4,946 recorded frames, and the demo cuts to the title on that same frame, so the crash is never shown. The last 846 frames (about 14 seconds) of recorded input never play.
+- **Staff credits** in bank 6 (`$9964`–`$9AD1`). The US release never shows them. The names are retained from the Famicom version, but the display animation code that showed them is completely gone. The names never appear otherwise.
+- **Sound `$24`**, which chains into sounds `$08` and `$06`. Nothing in the game plays it. [Listen](media/unused_sound_24.ogg). Oddly, a few beats from the first bar or so of the title screen play midway through.
+- **The end of the attract demo.** The demo plane is shot down after 4,100 of the 4,946 recorded frames, and the demo cuts to the title on that same frame, so the crash is never shown. The last 846 frames (about 14 seconds) of recorded input never play. This suggests that the demo was recorded earlier than the final release, and the game logic changed causing the demo to desync. The game cuts back to the title screen on the same frame as the player loses their life, and never shows the classic red screen.
 
 [docs/TECHNICAL.md](docs/TECHNICAL.md) has the disassembly, file offsets and step-by-step instructions for checking all of this yourself in a hex editor and emulator debugger.
 
@@ -79,9 +79,9 @@ The patch needs **Top Gun (USA) (Rev 1)**:
 
 The patched ROM has CRC32 `C8EECA6E`. This repository doesn't include any ROM; you need your own copy.
 
-## Game Genie codes
+## Game Genie codes (Untested)
 
-These switch on Konami's routines with no patch and no on-screen readouts. They only change where the game jumps; watch the results in an emulator's RAM viewer. All are in the fixed bank, so the 6-letter forms work anywhere.
+These switch on Konami's routines with no patch and no on-screen readouts. They only change where the game jumps; watch the results in an emulator's RAM viewer. All are in the fixed bank, so the 6-letter forms work anywhere. I haven't actually tested these, I am just assuming they work knowing what bytes need to be changed and how the Game Genie works.
 
 | Effect | 6-letter | 8-letter |
 | --- | --- | --- |
@@ -90,16 +90,6 @@ These switch on Konami's routines with no patch and no on-screen readouts. They 
 | Show the attract demo's crash instead of cutting to the title | `GIPSLX` | `GIOSLXGO` |
 
 A real Game Genie takes three codes at a time, so use the viewer or the recorder, not both. [docs/TECHNICAL.md](docs/TECHNICAL.md#game-genie-codes) explains what each code changes.
-
-## Building from source
-
-Needs Python 3 and [cc65](https://cc65.github.io/) (`ca65` and `ld65`).
-
-```
-python src/build.py "Top Gun (USA) (Rev 1).nes"
-```
-
-This checks the ROM's SHA-1, assembles [`src/topgun_extras.s`](src/topgun_extras.s), confirms the target space is empty and each hooked call site still holds the original bytes, then writes the patched ROM, IPS and BPS to `build/`.
 
 ## Repository layout
 
