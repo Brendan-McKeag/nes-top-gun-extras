@@ -57,12 +57,6 @@ Press **Select** on the title screen to move the cursor and **Start** to choose.
 | DEMO CHECK | Plays the attract demo while the recorder runs alongside it. Expected result: 107 rows, all `OK`, ending on `NG:00`. |
 | UNUSED SOUND | Plays sound `$24`. |
 
-| Sprite viewer | Staff credits | How the demo really ends |
-| --- | --- | --- |
-| ![Sprite viewer](media/sprite_viewer.png) | ![Staff credits](media/staff_credits.png) | ![Demo ending](media/demo_ending.png) |
-
-In the sprite viewer, the sprites are drawn by the game itself; the `SET`/`FR` numbers are the patch's readout. The demo-ending image comes from an emulator with the `GIPSLX` code, not from the patch.
-
 ## Applying the patch
 
 Download the patch from [Releases](../../releases) or the [`patch`](patch) folder and apply it with [Floating IPS](https://github.com/Alcaro/Flips) or [Rom Patcher JS](https://www.marcrobledo.com/RomPatcher.js/).
