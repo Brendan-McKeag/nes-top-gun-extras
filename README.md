@@ -9,10 +9,10 @@ A patch for **Top Gun (USA) (Rev 1)** that adds a title-screen menu for content 
 Everything in this list is Konami's, present in the retail cartridge and unreachable in normal play.
 
 - **Sprite viewer** at `$E9FF`. A 36-byte routine nothing calls. Controller 2 steps object 0 through every sprite set and animation frame.
-- **Attract-demo recorder** at `$CFA7`. A 38-byte routine nothing calls. It turns controller input into the (buttons, frames) pairs that make up the attract-demo table sitting right before it, and the shipped table still carries its overflow fingerprint.
+- **Attract-demo recorder** at `$CFA7`. A 38-byte routine nothing calls. It turns controller input into the (buttons, frames) pairs that make up the attract-demo table sitting right before it. This does not actually write a demo; it only pushes your inputs into an extra RAM address that wouldn't have been touched otherwise. Konami most likely used some other method to capture inputs for the demo rather than using the game itself.
 - **Staff credits** in bank 6 (`$9964`–`$9AD1`). The US release never shows them. The names are retained from the Famicom version, but the display animation code that showed them is completely gone. The names never appear otherwise.
 - **Sound `$24`**, which chains into sounds `$08` and `$06`. Nothing in the game plays it. [Listen](media/unused_sound_24.ogg). Oddly, a few beats from the first bar or so of the title screen play midway through.
-- **The end of the attract demo.** The demo plane is shot down after 4,100 of the 4,946 recorded frames, and the demo cuts to the title on that same frame, so the crash is never shown. The last 846 frames (about 14 seconds) of recorded input never play. This suggests that the demo was recorded earlier than the final release, and the game logic changed causing the demo to desync. The game cuts back to the title screen on the same frame as the player loses their life, and never shows the classic red screen.
+- **The end of the attract demo.** The demo plane is shot down after 4,100 of the 4,946 recorded frames, and the demo cuts to the title on that same frame, so the crash is never shown. The last 846 frames (about 14 seconds) of recorded input never play. This suggests that the demo was recorded earlier than the final release, and the game logic changed causing the demo to desync from how the player originally recorded it. The game cuts back to the title screen on the same frame as the demo-player loses their life, and never shows the classic red screen. This can be bypassed with a Game Genie code to show the explosion and a game over screen as the demo-player has 0 lives.
 
 [docs/TECHNICAL.md](docs/TECHNICAL.md) has the disassembly, file offsets and step-by-step instructions for checking all of this yourself in a hex editor and emulator debugger.
 
@@ -20,7 +20,7 @@ Everything in this list is Konami's, present in the retail cartridge and unreach
 
 **The patch doesn't modify any of Konami's routines or data.** It writes new code into empty space in the ROM (`$ED80`–`$F3AE`, which is unused `$FF` filler in the retail cartridge) and rewrites five instructions (13 bytes) so the game reaches that code. Everything else in the patched ROM is byte-for-byte the retail game.
 
-Konami's two debug routines print nothing. The viewer only changes which sprite the game draws, and the recorder only leaves numbers in RAM. **All of the on-screen text readouts are added by this patch**, so you can see what the original code is doing.
+Konami's two debug routines print nothing. The viewer only changes which sprite the game draws, and the recorder only leaves numbers in RAM. **All of the on-screen text readouts are added by this patch**, so you can see what the original code is doing from within the game itself.
 
 | Feature | Konami's original, unchanged | Added by this patch to make it visible |
 | --- | --- | --- |
